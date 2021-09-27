@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Movement();
-        Interact();
     }
 
     //function for the player's movement
@@ -48,9 +47,9 @@ public class PlayerController : MonoBehaviour
     }
 
     // function for the player's interaction ability
-    private void Interact()
+    public bool Interact()
     {
-        interactStatus = Input.GetKeyDown("e");
+        return Input.GetKey("e");
     }
 
 

@@ -14,14 +14,21 @@ public class NPCController : MonoBehaviour
             ShowUI();
         }
     }
-
     //Check if the player is interacting with the NPC
     protected void OnTriggerStay2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            if(col.gameObject.GetComponent<PlayerController>().interactStatus) interacted = true;
+            if(col.gameObject.GetComponent<PlayerController>().Interact()) interacted = true;
             Debug.Log("interacted " + interacted);
+        }
+    }
+
+    protected void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            interacted = false;
         }
     }
 
