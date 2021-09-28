@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //player's movement speed
-    public float movementSpeed = 0.02f;
+    public float movementSpeed;
 
     //main camera controller
     private CameraController mainCamera;
+
+    private GameController Controller;
 
     //if the player tries to interact it sets the interaction status to true
     [HideInInspector]
@@ -19,6 +21,10 @@ public class PlayerController : MonoBehaviour
         //focuses the main camera to the player
         mainCamera = Camera.main.GetComponent<CameraController>();
         FocusCamera(gameObject);
+
+        Controller = GameObject.Find("Game Controller").GetComponent<GameController>();
+
+        Controller.SetPlayer(this);
     }
 
     //function that sets the camera's target and lock status
@@ -35,6 +41,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Movement();
+        Inventory();
     }
 
     //function for the player's movement
@@ -43,13 +50,24 @@ public class PlayerController : MonoBehaviour
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
 
-        transform.position += new Vector3(inputX, inputY, 0) * movementSpeed;
+        GetComponent<Rigidbody2D>().velocity = new Vector2(inputX, inputY) * movementSpeed;
     }
 
     // function for the player's interaction ability
     public bool Interact()
     {
         return Input.GetKey("e");
+    }
+
+    private bool inventoryStatus = false;
+    private void Inventory()
+    {
+        if (Input.GetKeyDown("i"))
+        {
+            inventoryStatus = !inventoryStatus;
+        }
+
+        Controller.ShowInventory(inventoryStatus);
     }
 
 
