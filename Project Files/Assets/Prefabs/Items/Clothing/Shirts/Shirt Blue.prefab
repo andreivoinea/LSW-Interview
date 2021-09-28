@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7245709530635771779
+--- !u!1 &908084530056602798
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8443521151729189122}
-  - component: {fileID: 9017815193773368835}
-  - component: {fileID: 8360495057566889638}
+  - component: {fileID: 1970834934514409935}
+  - component: {fileID: 8185837931184884891}
+  - component: {fileID: 8243256372621624077}
+  - component: {fileID: 5627117813699874739}
   m_Layer: 5
-  m_Name: ItemContainer
-  m_TagString: Untagged
+  m_Name: Shirt Blue
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8443521151729189122
+--- !u!224 &1970834934514409935
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7245709530635771779}
+  m_GameObject: {fileID: 908084530056602798}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.07751937, y: 0.13192612, z: 1}
@@ -37,28 +38,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0.5}
---- !u!222 &9017815193773368835
+--- !u!222 &8185837931184884891
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7245709530635771779}
+  m_GameObject: {fileID: 908084530056602798}
   m_CullTransparentMesh: 1
---- !u!114 &8360495057566889638
+--- !u!114 &8243256372621624077
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7245709530635771779}
+  m_GameObject: {fileID: 908084530056602798}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.4745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -75,3 +76,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5627117813699874739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908084530056602798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669fea9caf431b94b84bf3ec65b29944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Blue Shirt
+  description: Simple shirt, with a blue color. Wear it to show your fasjhion sense!
+  isTradable: 1
+  price: 15
+  image: {fileID: 21300000, guid: 5fdb41f80822f2d448d514ec1eeb5fe3, type: 3}
+  hasDurability: 0
+  maxDurability: 0
+  currentDurability: 0
