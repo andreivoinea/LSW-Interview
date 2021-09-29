@@ -23,6 +23,10 @@ public class ItemEditor : Editor
             item.currentDurability = EditorGUILayout.IntField("Current Durability", item.currentDurability);
         }
 
+        item.isStackable = EditorGUILayout.Toggle("Is Stackable", item.isStackable);
+        if (item.isStackable) item.maxStack = EditorGUILayout.IntField("Max Stack Size", item.maxStack);
+
+
     }
 
 

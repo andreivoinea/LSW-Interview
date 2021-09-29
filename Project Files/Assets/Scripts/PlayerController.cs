@@ -13,11 +13,15 @@ public class PlayerController : MonoBehaviour
 
     private GameController Controller;
 
+    public int Currency = 0;
+
     //if the player tries to interact it sets the interaction status to true
     [HideInInspector]
     public bool interactStatus = false;
 
-    void Start()
+    public 
+
+    void Awake()
     {
         //focuses the main camera to the player
         mainCamera = Camera.main.GetComponent<CameraController>();
