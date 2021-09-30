@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 107290430}
   - component: {fileID: 107290431}
+  - component: {fileID: 107290432}
   m_Layer: 0
   m_Name: Inventory Camera
   m_TagString: Untagged
@@ -197,6 +198,18 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &107290432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107290429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d37ad98653015744a76f5d6715d2804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &304370681
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,12 +436,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894d13ab12b764b45a98d551cbacb6b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryCamera: {fileID: 107290431}
+  inventoryCamera: {fileID: 0}
   currencyText: {fileID: 1220102388}
-  contents:
-  - item: {fileID: 4227701091826446374, guid: c633dd380aaf58a41857b08d6cb23c77, type: 3}
-    placement: 2
-    size: 1
+  itemList: []
   InventorySlots: {fileID: 1898294167}
   ItemContainer: {fileID: 7245709530635771779, guid: 0e61cc605aeb91540986df65f25ff7da, type: 3}
 --- !u!224 &522033744
@@ -755,6 +765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0d4f5769f44da47a628645e7ec240f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allItems: []
 --- !u!1 &989566082
 GameObject:
   m_ObjectHideFlags: 0
