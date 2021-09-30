@@ -155,7 +155,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                 if (c.containerInfo == ContainerFilled.NotFilled && keep)
                 {
                     GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, size), true);
-                    GetItemReference(gameObject).Size = size;
+                    GetItemReference(gameObject).Size -= size;
 
                     isFollowing = true;
                 }
