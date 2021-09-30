@@ -30,6 +30,8 @@ public class Item : DraggableObject
     private void Awake()
     {
         if(isStackable) transform.GetChild(0).gameObject.SetActive(true);//If Item can stack turn on the corresponding UI
+
+        if (ImageComponent.sprite != image) ImageComponent.sprite = image;//Sets the sprite to the Image Component
     }
     private new void Update()
     {

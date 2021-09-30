@@ -43,3 +43,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: UnderPlayer
+    uniqueID: 2694169239
+    locked: 0
+  - name: Player
+    uniqueID: 1357857229
+    locked: 0
+  - name: OverPlayer
+    uniqueID: 3868336947
+    locked: 0

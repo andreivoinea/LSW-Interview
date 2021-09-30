@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCController : MonoBehaviour
+public abstract class NPCController : MonoBehaviour
 {
     //This Script is attached to NPCs, it contains methods for NPC interaction
     //
     //
-
-    //Variable that marks if the NPC has been interacted with
-    protected bool interacted;
 
     //Method that shows the interact UI if the player is in range 
     protected void OnTriggerEnter2D(Collider2D col)
@@ -23,8 +20,7 @@ public class NPCController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            if(col.gameObject.GetComponent<PlayerController>().Interact()) interacted = true;
-            Debug.Log("interacted " + interacted);
+            if(col.gameObject.GetComponent<PlayerController>().Interact()) OnInteracted(true);
         }
     }
 
@@ -33,12 +29,17 @@ public class NPCController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            interacted = false;
+            OnInteracted(false);
         }
     }
 
     //Methods that shows the Interact UI
-    virtual protected void ShowUI() { }
+    abstract protected void ShowUI();
+
+    //Method that fires when the player interacts or stops interracting with the NPC
+    abstract protected void OnInteracted(bool interacted);
+
+
 
 
 

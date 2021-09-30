@@ -152,14 +152,14 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                 {
                     GetItemReference(gameObject).placement = c.Placement;
                     transform.SetParent(c.container);
-                    transform.localPosition = new Vector3(50f, 0f, 0f);
+                    transform.localPosition = new Vector3(50f,50f,0f);//Accounts for the Item Pivot
 
                     isFollowing = false;
                     return;
                 }
                 else//If we want to keep the item, we create a new Item with the amount we want to place and remove that amount from the current item stack
                 {
-                    GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, size), true);
+                    GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, size), GetInventory(gameObject), true);
                     GetItemReference(gameObject).Size -= size;
 
                     isFollowing = true;
@@ -171,7 +171,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                 {
                     GetItemReference(gameObject).placement = c.Placement;
                     transform.SetParent(c.container);
-                    transform.localPosition = new Vector3(50f, 0f, 0f);
+                    transform.localPosition = new Vector3(50f, 50f, 0f);//Accounts for the Item Pivot
 
                     c.itemContent.reference.GetComponent<Item>().ExtractFromContainer();
 
@@ -227,15 +227,15 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         initialContainer = c.container;//Sets the initial container
 
         if (!half || CurrentItemStack==1)//Full extraction when half is set to false or the container only has 1 item
-            transform.SetParent(GameController.Instance.Inventory.InventorySlots);//Extracts Item
+            transform.SetParent(GetInventory(gameObject).InventorySlots);//Extracts Item
         else //Half Extraction
         {
             int initSize = CurrentItemStack;
             GetItemReference(gameObject).Size = initSize % 2 == 0 ? initSize / 2 : initSize / 2 + 1;//calculates the new stack size
 
-            transform.SetParent(GameController.Instance.Inventory.InventorySlots);//Extracts Item
+            transform.SetParent(GetInventory(gameObject).InventorySlots);//Extracts Item
 
-            GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, initSize - GetItemReference(gameObject).Size), true);//Creates new Item with the remaining stack size
+            GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, initSize - GetItemReference(gameObject).Size), GetInventory(gameObject), true);//Creates new Item with the remaining stack size
         }
 
         isFollowing = true;
@@ -245,14 +245,16 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
     private void ReturnToInitialContainer()
     {
         transform.SetParent(initialContainer.gameObject.transform);
-        transform.localPosition = new Vector3(50f, 0f, 0f);
+        transform.localPosition = new Vector3(50f, 50f, 0f); //Accounts for the Item Pivot
         isFollowing = false;
     }
 
     //Method that gets the item information about a specified GameObject (used for example for getting the item information of the current item)
     public static InventoryManager.ItemContent GetItemReference(GameObject comparingItem)
     {
-        foreach (InventoryManager.ItemContent item in GameController.Instance.Inventory.itemList)
+        InventoryManager inventory = GetInventory(comparingItem);
+
+        foreach (InventoryManager.ItemContent item in inventory.itemList)
         {
             if (item.reference == comparingItem)
             {
@@ -263,8 +265,30 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         return null;
     }
 
+    //Method that is able to fully delete an item instance, both from the scene and the item list
+    private void DeleteItem(GameObject item)
+    {
+        InventoryManager inventory = GetInventory(item);
+        foreach (InventoryManager.ItemContent content in inventory.itemList)
+        {
+            if (content.reference == item)
+            {
+                inventory.itemList.Remove(content);
+                break;
+            }
+        }
+
+        Destroy(item);
+    }
+
+    //Methods that returns the inventory where the specified item is held
+    private static InventoryManager GetInventory(GameObject gameObject) 
+    {
+        return gameObject.GetComponentInParent<InventoryManager>();
+    }
+
     //Method that modifies the stack UI for the item
-    public int CurrentItemStack { get { return int.Parse(transform.GetChild(0).GetComponent<TextMeshProUGUI>().text); } set { transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString();} }
+    public int CurrentItemStack { get { return int.Parse(transform.GetChild(0).GetComponent<TextMeshProUGUI>().text); } set { transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString(); } }
 
     //Method that deletes the item if the stack is empty
     private void CheckEmptyStack()
@@ -272,22 +296,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         if (CurrentItemStack == 0) DeleteItem(gameObject);
     }
 
-    //Method that is able to fully delete an item instance, both from the scene and the item list
-    private void DeleteItem(GameObject item)
-    {
-        foreach (InventoryManager.ItemContent content in GameController.Instance.Inventory.itemList)
-        {
-            if (content.reference == item)
-            {
-                GameController.Instance.Inventory.itemList.Remove(content);
-                break;
-            }
-        }
-
-        Destroy(item);
-    }
-    
-    //Abstract Methods that are overloaded in <Item>
+    //Abstract Methods that are overrided in <Item>
     abstract protected string ItemName();
     abstract protected bool StackableStatus();
     abstract protected Item GetItem();

@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     }
 
     //Variable to access Player's Inventory
-    public InventoryManager Inventory;
+    public PlayerInventory Inventory;
 
     //Variable to access the Player
     public PlayerController Player;
@@ -33,11 +33,6 @@ public class GameController : MonoBehaviour
     public void SetPlayer(PlayerController player)
     {
         Player = player;
-    }
-
-    private void Update()
-    {
-        InventoryBehaviour();
     }
 
     //Method that shows the Inventory Panel UI
@@ -49,16 +44,7 @@ public class GameController : MonoBehaviour
         Inventory.gameObject.SetActive(open);
 
         //Spawns Player Items in case that the inventory is opened
-        if (open) Inventory.SpawnContents(InventoryManager.InventoryType.Player);
-    }
-
-    //Method that handles the Inventory Camera
-    private void InventoryBehaviour()
-    {
-        if (Inventory == null) return;
-        if (Inventory.inventoryCamera == null) Inventory.SetPlayerInventoryCamera();//Load the Inventory Camera
-
-        Inventory.inventoryCamera.SetTarget(Player.gameObject);//set's the inventory camera to follow the player
+        if (open) Inventory.SpawnContents(InventoryManager.InventoryType.Player,Inventory);
     }
     
     //Method that check if the player has enough currency to purchase an item
@@ -87,13 +73,13 @@ public class GameController : MonoBehaviour
     }
 
     //Method that handles Items Spawning in their Specified Inventory Slots
-    public static void CreateItem(InventoryManager.ItemContent item, bool addToList = false)//Specifies the item to create and if it should be added to the item list .The initial list is created once it loads form memory, and any subsequent item creation should have the addToList flag set to true
+    public static void CreateItem(InventoryManager.ItemContent item, InventoryManager inventory, bool addToList = false)//Specifies the item to create and if it should be added to the item list .The initial list is created once it loads form memory, and any subsequent item creation should have the addToList flag set to true
     {
-        if(item==null) return;
-        if(item.item==null) return;
-        item.reference = Instantiate(Instance.GetItem(item.item).gameObject, Instance.Inventory.InventorySlots.transform.GetChild(item.placement), false);//Creates the item at the specified position
+        if (item == null) return;
+        if (item.item == null) return;
+        item.reference = Instantiate(Instance.GetItem(item.item).gameObject, inventory.InventorySlots.transform.GetChild(item.placement), false);//Creates the item at the specified position
         item.reference.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item.size.ToString();//Loads the items UI to match the current number of items 
-        if (addToList) Instance.Inventory.AddItem(item);//Adds the item to the item list
+        if (addToList) inventory.AddItem(item);//Adds the item to the item list
     }
 
     //Ensures that every time the Player closes the game, it's Inventory is saved;

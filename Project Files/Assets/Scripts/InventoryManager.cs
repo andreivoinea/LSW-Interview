@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class InventoryManager : MonoBehaviour
+public abstract class InventoryManager : MonoBehaviour
 {
     //This Script Handles all inventory related queries
     //
     //
-
-    //Inventory camera for real-time equipment updates
-    [HideInInspector]public CameraController inventoryCamera;
-
-    //UI that corresponds to player's gold
-    public TextMeshProUGUI currencyText;
 
     //The ItemContent class holds more information than a regular Item, such as current stack size, placement in the inventory slot and the prefab from which the  item is created
     [System.Serializable]
@@ -48,19 +42,24 @@ public class InventoryManager : MonoBehaviour
     public void SpawnItemContainers(InventoryType inventoryType)
     {
         int itemNumber;
+        int divisionNumber;
         switch (inventoryType)
         {
-            case InventoryType.Player://The Player Inventory holds 16 items
+            case InventoryType.Player://The Player Inventory holds 16 items on rows with 8 items
                 itemNumber = 16;
+                divisionNumber = 8;
                 break;
-            case InventoryType.Shopkeeper://The Shopkeepe Inventory holds 32 items
-                itemNumber = 32;
+            case InventoryType.Shopkeeper://The Shopkeepe Inventory holds 24 items on rows with 6 items
+                itemNumber = 24;
+                divisionNumber = 6;
                 break;
-            case InventoryType.Storage://The Storage Inventory holds 40 items
+            case InventoryType.Storage://The Storage Inventory holds 40 items items on rows with 8 items
                 itemNumber = 40;
+                divisionNumber = 5;
                 break;
             default:
                 itemNumber = 0;
+                divisionNumber = 0;
                 break;
         }
 
@@ -68,31 +67,22 @@ public class InventoryManager : MonoBehaviour
         {
             GameObject itemContainer = Instantiate(ItemContainer, InventorySlots);//Spawn Containers
 
-            itemContainer.transform.localPosition = new Vector3(120f * (i%8)-50f, i<8?0f:-130f, 0f);//Containers have a custom position in the Canvas UI
+            itemContainer.transform.localPosition = new Vector3(120f * (i%divisionNumber), -130f*(int)(i/divisionNumber), 0f);//Containers have a custom position in the Canvas UI
+
+            itemContainer.transform.localPosition -= new Vector3(50f, 50f, 0f); //Accounts for the Item container Pivot
         }
 
         containersSpawned = true;
     }
 
     //Method that spawns all inventory items
-    public void SpawnContents(InventoryType inventoryType)
+    public void SpawnContents(InventoryType inventoryType,InventoryManager inventory)
     {
         if (containersSpawned) return;
         SpawnItemContainers(inventoryType);
 
         foreach (ItemContent item in itemList)
-            GameController.CreateItem(item);
-    }
-
-    //Method that gets the Player Inventory Camera
-    public void SetPlayerInventoryCamera()
-    {
-        inventoryCamera = GetComponentInChildren<CameraController>();
-    }
-
-    private void Update()
-    {
-        currencyText.text = "Gold: " + GameController.Instance.Player.Currency;//Updates the Currency UI
+            GameController.CreateItem(item,inventory);
     }
 
     //Adds new item to the inventory list
@@ -101,5 +91,12 @@ public class InventoryManager : MonoBehaviour
         itemList.Add(item);
     }
 
+    public void Update()
+    {
+        InventoryBehaviour();
+    }
+
+    //Abstract Methods that are overrided in inventory type scripts
+    abstract protected void InventoryBehaviour();
 
 }
