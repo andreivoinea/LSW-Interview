@@ -5,7 +5,7 @@ using UnityEngine;
 public class StorageManager : MonoBehaviour
 {
 
-    public static List<Item> allItems;
+    [SerializeField] public List<Item> allItems;
 
     private static bool loaded = false;
 

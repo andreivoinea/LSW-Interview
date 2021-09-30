@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -9,7 +10,8 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        if(_instance != null && _instance !=this)
+
+        if (_instance != null && _instance != this)
             Destroy(gameObject);
         else _instance = this;
 
@@ -28,7 +30,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void SetPlayer(PlayerController player) 
+    public void SetPlayer(PlayerController player)
     {
         Player = player;
     }
@@ -40,17 +42,18 @@ public class GameController : MonoBehaviour
 
     private void InventoryBehaviour()
     {
-        if(Inventory==null) return;
-        if(Inventory.inventoryCamera == null) return;
+        if (Inventory == null) return;
+        if (Inventory.inventoryCamera == null) return;
 
         Inventory.inventoryCamera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, Inventory.inventoryCamera.transform.position.z);
     }
 
-    public Item GetItem(Item mainItem) 
+    public Item GetItem(Item mainItem)
     {
-        foreach (Item item in StorageManager.allItems) 
+
+        foreach (Item item in GetComponent<StorageManager>().allItems)
         {
-            if (item == mainItem) return item;
+            if (item.Name == mainItem.Name) return item;
         }
 
         return null;
@@ -61,13 +64,21 @@ public class GameController : MonoBehaviour
         StorageManager.Save();
     }
 
-    public bool CheckCurrency(int price) 
+    public bool CheckCurrency(int price)
     {
         if (price > Player.Currency) return false;
         return true;
     }
-    public void AddCurrency(int gold) 
+    public void AddCurrency(int gold)
     {
         Player.Currency += gold;
     }
+
+    public static void CreateItem(InventoryManager.ItemContent item, bool addToList = false)
+    {
+        item.reference = Instantiate(Instance.GetItem(item.item).gameObject, Instance.Inventory.InventorySlots.transform.GetChild(item.placement), false);
+        item.reference.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item.size.ToString();
+        if (addToList) Instance.Inventory.AddItem(item);
+    }
+
 }

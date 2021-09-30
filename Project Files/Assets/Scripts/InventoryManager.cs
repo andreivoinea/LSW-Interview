@@ -14,6 +14,14 @@ public class InventoryManager : MonoBehaviour
         [SerializeField] public GameObject reference;
         public int placement;
         public int size;
+        public int Size { get { return size; } set { size = value; reference.GetComponent<Item>().CurrentItemStack = value; } }
+
+        public ItemContent(Item inputItem, int position, int currentSize)
+        {
+            item = inputItem;;
+            placement = position;
+            size = currentSize;
+        }
     }
 //[HideInInspector]
     public List<ItemContent> prefabContents;
@@ -53,11 +61,7 @@ public class InventoryManager : MonoBehaviour
         SpawnPlayerItemContainers();
 
         foreach (ItemContent item in prefabContents)
-        {
-            item.reference = Instantiate(GameController.Instance.GetItem(item.item).gameObject, InventorySlots.transform.GetChild(item.placement), false);
-            item.reference.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item.size.ToString();
-        }
-
+            GameController.CreateItem(item);
     }
 
     public void SetPlayerInventoryCamera()
@@ -68,6 +72,11 @@ public class InventoryManager : MonoBehaviour
     private void Update()
     {
         currencyText.text = "Gold: " + GameController.Instance.Player.Currency;
+    }
+
+    public void AddItem(ItemContent item)
+    {
+        prefabContents.Add(item);
     }
 
 

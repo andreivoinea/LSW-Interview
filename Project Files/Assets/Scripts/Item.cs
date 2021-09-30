@@ -27,11 +27,28 @@ public class Item : DraggableObject
     {
         if(isStackable)
         transform.GetChild(0).gameObject.SetActive(true);
+
+        if (ImageComponent.sprite != image) ImageComponent.sprite = image;
     }
     private new void Update()
     {
         base.Update();
         if(ImageComponent.sprite!=image) ImageComponent.sprite = image;
+    }
+
+    protected override string ItemName()
+    {
+        return Name;
+    }
+
+    protected override bool StackableStatus()
+    {
+        return isStackable;
+    }
+
+    protected override Item GetItem()
+    {
+        return this;
     }
 
 }

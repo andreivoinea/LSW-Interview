@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e5e4f6931a3717a418918a71992268e7, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -98,8 +98,8 @@ MonoBehaviour:
   hasDurability: 0
   maxDurability: 0
   currentDurability: 0
-  isStackable: 0
-  maxStack: 0
+  isStackable: 1
+  maxStack: 100
 --- !u!1 &7816094305468350890
 GameObject:
   m_ObjectHideFlags: 0

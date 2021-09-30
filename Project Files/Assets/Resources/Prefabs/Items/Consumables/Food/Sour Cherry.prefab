@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669fea9caf431b94b84bf3ec65b29944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  das: 0
   Name: Sour Cherry
   description: Small round edible fruits. They have a sour taste but they are very
     nutritious.
@@ -232,5 +233,5 @@ MonoBehaviour:
   hasDurability: 0
   maxDurability: 0
   currentDurability: 0
-  isStackable: 0
-  maxStack: 0
+  isStackable: 1
+  maxStack: 100
