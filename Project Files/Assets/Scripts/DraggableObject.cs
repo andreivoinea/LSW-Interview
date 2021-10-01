@@ -69,10 +69,11 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
             content = Container.GetItemReference(gameObject, init);
             c.itemList.Add(content);
 
+            if(size == -1)
             init.itemList.Remove(content);
         }else if (init.isTradingSlot)
         {
-            content = Container.GetItemReference(gameObject, init); init.itemList.Remove(content);
+                content = Container.GetItemReference(gameObject, init); init.itemList.Remove(content);
                 content = new InventoryManager.ItemContent((Item)this, gameObject, Container.GetFirstContainerAvalabile(c), init.itemContent.Size);
                 c.itemList.Add(content);
         }
@@ -92,7 +93,10 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                 else//If we want to keep the item, we create a new Item with the amount we want to place and remove that amount from the current item stack
                 {
                     GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, size), c.itemList, c.container.parent, true);
+
                     content.Size -= size;
+
+                    if (content.size <= 0) DeleteItem(gameObject,init.itemList);
 
                     isFollowing = true;
                     return;
@@ -121,6 +125,8 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                     isFollowing = true;
 
                     content.Size -= c.itemContent.item.maxStack - c.itemContent.Size;
+                    if (content.size <= 0) DeleteItem(gameObject, init.itemList);
+
                     c.itemContent.Size = c.itemContent.item.maxStack;
                     return;
                 }
@@ -128,9 +134,13 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                 {
                     c.itemContent.Size += size;
 
-                    if (keep) content.Size -= size;
+                    if (keep)
+                    {
+                        content.Size -= size;
+                        if (content.size <= 0) DeleteItem(gameObject, init.itemList);
+                    }
                     else
-                        DeleteItem(gameObject,c.itemList);
+                        DeleteItem(gameObject, c.itemList);
 
                     isFollowing = true;
 
@@ -200,8 +210,13 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
     //Method that is able to fully delete an item instance, both from the scene and the item list
     private void DeleteItem(GameObject item,List<InventoryManager.ItemContent> list)
     {
+        Debug.Log(item.name);
+       
+
         foreach (InventoryManager.ItemContent content in list)
         {
+            Debug.Log(content.item.name);
+            Debug.Log(content.reference.name);
             if (content.reference == item)
             {
                 list.Remove(content);
