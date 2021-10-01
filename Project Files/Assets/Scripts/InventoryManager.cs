@@ -20,80 +20,95 @@ public abstract class InventoryManager : MonoBehaviour
 
         public ItemContent(Item inputItem, int position, int currentSize)//Construnctor for new Items
         {
-            item = inputItem;;
+            item = inputItem;
             placement = position;
             size = currentSize;
         }
+
+        public ItemContent(Item inputItem,GameObject itemReference, int position, int currentSize)//Construnctor for new Items
+        {
+            item = inputItem;
+            reference = itemReference;
+            placement = position;
+            size = currentSize;
+        }
+
     }
 
     //Emum for the different types of inventories
     public enum InventoryType { Player,Shopkeeper,Storage }
 
+    public int rowCapacity;
+
     public List<ItemContent> itemList;//List of all the Items in the Inventory
 
 
-    public Transform InventorySlots;//Variable for the main container that hold all other smaller containers
-    public GameObject ItemContainer;//Prefab for Item containers
-
-    //Variable that remembers if the containers already spawned
-    private bool containersSpawned;
+    public Transform InventorySlots;//Variable for the main container that holds all other smaller containers
+    public static GameObject ItemContainer { get { if(ItemContainerPrefab == null) ItemContainerPrefab = Resources.Load("Prefabs/Inventory/ItemContainer") as GameObject; return ItemContainerPrefab; }  } //Prefab for Item containers
+    public static GameObject ItemContainerPrefab;
 
     //Method that spawn Item Containers forthe Player Inventory
-    public void SpawnItemContainers(InventoryType inventoryType)
+    public static void SpawnItemContainers(int divisionNumber,InventoryType inventoryType, Transform InventoryContainer, List<ItemContent> list)
     {
         int itemNumber;
-        int divisionNumber;
         switch (inventoryType)
         {
             case InventoryType.Player://The Player Inventory holds 16 items on rows with 8 items
                 itemNumber = 16;
-                divisionNumber = 8;
                 break;
             case InventoryType.Shopkeeper://The Shopkeepe Inventory holds 24 items on rows with 6 items
                 itemNumber = 24;
-                divisionNumber = 6;
                 break;
             case InventoryType.Storage://The Storage Inventory holds 40 items items on rows with 8 items
                 itemNumber = 40;
-                divisionNumber = 5;
                 break;
             default:
                 itemNumber = 0;
-                divisionNumber = 0;
                 break;
         }
 
         for (int i = 0; i < itemNumber; ++i)
         {
-            GameObject itemContainer = Instantiate(ItemContainer, InventorySlots);//Spawn Containers
+            GameObject itemContainer = Instantiate(ItemContainer, InventoryContainer);//Spawn Containers
+
+            itemContainer.GetComponent<Container>().itemList = list;
 
             itemContainer.transform.localPosition = new Vector3(120f * (i%divisionNumber), -130f*(int)(i/divisionNumber), 0f);//Containers have a custom position in the Canvas UI
 
             itemContainer.transform.localPosition -= new Vector3(50f, 50f, 0f); //Accounts for the Item container Pivot
         }
-
-        containersSpawned = true;
     }
 
     //Method that spawns all inventory items
-    public void SpawnContents(InventoryType inventoryType,InventoryManager inventory)
+    public static void SpawnContents(InventoryType inventoryType,int divisionNumber, Transform InventoryContainer,List<ItemContent> list)
     {
-        if (containersSpawned) return;
-        SpawnItemContainers(inventoryType);
+        if (!GetContainersSpawned(InventoryContainer))
+        SpawnItemContainers(divisionNumber, inventoryType, InventoryContainer,list);
 
-        foreach (ItemContent item in itemList)
-            GameController.CreateItem(item,inventory);
-    }
-
-    //Adds new item to the inventory list
-    public void AddItem(ItemContent item)
-    {
-        itemList.Add(item);
+        foreach (ItemContent item in list)
+            GameController.CreateItem(item,list,InventoryContainer);
     }
 
     public void Update()
     {
         InventoryBehaviour();
+    }
+
+    private static bool GetContainersSpawned(Transform container)
+    {
+        if (container.childCount == 0) return false;
+        return true;
+    }
+
+    public static void ClearContents(Transform InventoryContainer)
+    {
+        Item[] items = InventoryContainer.GetComponentsInChildren<Item>();
+
+        foreach (Item i in items)
+        {
+            Destroy(i.gameObject);
+        }
+
     }
 
     //Abstract Methods that are overrided in inventory type scripts

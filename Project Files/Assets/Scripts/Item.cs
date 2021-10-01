@@ -41,19 +41,19 @@ public class Item : DraggableObject
     }
 
     //Gets Item Name for usage in DraggableObject
-    protected override string ItemName()
+    public override string ItemName()
     {
         return Name;
     }
 
     //Checks if item is stackable for usage in DraggableObject
-    protected override bool StackableStatus()
+    public override bool StackableStatus()
     {
         return isStackable;
     }
 
     //Returns Item Component for usage in DraggableObject
-    protected override Item GetItem()
+    public override Item GetItem()
     {
         return this;
     }

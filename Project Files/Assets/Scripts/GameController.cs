@@ -19,7 +19,10 @@ public class GameController : MonoBehaviour
         if (_instance != null && _instance != this)
             Destroy(gameObject);
         else _instance = this;
-   
+    }
+
+    private void Start()
+    {
         StorageManager.Load();//Load Player's Inventory from Storage
     }
 
@@ -35,16 +38,52 @@ public class GameController : MonoBehaviour
         Player = player;
     }
 
+    //Variable that hold information about the Player's action to open or close the Inventory Tab
+    public bool inventoryStatus = false;
+
     //Method that shows the Inventory Panel UI
-    public void ShowInventory(bool open)
+    public void ShowInventory(bool setStatus)
     {
-        if (open == Inventory.gameObject.activeSelf) return; // makes sure the player dosen't try to open the inventory while it is already open or close it when it's closed
+        if (!GameController.Instance.IsPlayerInteracting()) inventoryStatus = setStatus;
+
+        if (inventoryStatus == Inventory.gameObject.activeSelf) return; // makes sure the player dosen't try to open the inventory while it is already open or close it when it's closed
 
         //Opens Or Closes the Inventory Panel
-        Inventory.gameObject.SetActive(open);
+        Inventory.gameObject.SetActive(inventoryStatus);
 
         //Spawns Player Items in case that the inventory is opened
-        if (open) Inventory.SpawnContents(InventoryManager.InventoryType.Player,Inventory);
+        if (inventoryStatus) InventoryManager.SpawnContents(InventoryManager.InventoryType.Player, Inventory.rowCapacity, Inventory.InventorySlots, Inventory.itemList);
+        else InventoryManager.ClearContents(Inventory.InventorySlots);
+    }
+
+    public bool CheckInventoryEmptySpaces(int neededSpaces)
+    {
+        if (neededSpaces < 16 - Inventory.itemList.Count) return true;
+        return false;
+
+    }
+
+    public List<int> GetInventoryEmptySpaces(int neededSpaces)
+    {
+        List<int> emptySpaces = new List<int>();
+
+        int[] aux = new int[16];
+
+        foreach (InventoryManager.ItemContent item in Inventory.itemList)
+        {
+            ++aux[item.placement];
+        }
+
+        for (int i = 0; i < 16; ++i)
+            if (aux[i] == 0)
+            {
+                emptySpaces.Add(i);
+                if (emptySpaces.Count == neededSpaces) return emptySpaces;
+            }
+
+
+        return emptySpaces;
+
     }
     
     //Method that check if the player has enough currency to purchase an item
@@ -73,13 +112,23 @@ public class GameController : MonoBehaviour
     }
 
     //Method that handles Items Spawning in their Specified Inventory Slots
-    public static void CreateItem(InventoryManager.ItemContent item, InventoryManager inventory, bool addToList = false)//Specifies the item to create and if it should be added to the item list .The initial list is created once it loads form memory, and any subsequent item creation should have the addToList flag set to true
+    public static void CreateItem(InventoryManager.ItemContent item, List<InventoryManager.ItemContent> list,Transform inventoryContainer, bool addToList = false)//Specifies the item to create and if it should be added to the item list .The initial list is created once it loads form memory, and any subsequent item creation should have the addToList flag set to true
     {
         if (item == null) return;
         if (item.item == null) return;
-        item.reference = Instantiate(Instance.GetItem(item.item).gameObject, inventory.InventorySlots.transform.GetChild(item.placement), false);//Creates the item at the specified position
+
+        item.reference = Instantiate(Instance.GetItem(item.item).gameObject, inventoryContainer.GetChild(item.placement), false);//Creates the item at the specified position
         item.reference.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item.size.ToString();//Loads the items UI to match the current number of items 
-        if (addToList) inventory.AddItem(item);//Adds the item to the item list
+        if (addToList) list.Add(item);//Adds the item to the item list
+    }
+
+    private bool playerInteracting;
+    public void PlayerInteracting(bool status)
+    {
+        playerInteracting = status;
+    }
+    public bool IsPlayerInteracting() {
+        return playerInteracting;
     }
 
     //Ensures that every time the Player closes the game, it's Inventory is saved;

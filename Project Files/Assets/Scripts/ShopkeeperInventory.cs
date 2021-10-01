@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class ShopkeeperInventory : InventoryManager
 {
     //This Script handles all shopkeeper inventory methods and variables
@@ -14,6 +15,9 @@ public class ShopkeeperInventory : InventoryManager
 
     //UI that corresponds to player's gold
     public TextMeshProUGUI playerCurrencyText;
+
+    //Variable for the player invetory container that holds all other smaller containers. Used to sell items from the player's inventory.
+    public Transform PlayerInventoryHolder;
 
     private new void Update()
     {
@@ -34,5 +38,7 @@ public class ShopkeeperInventory : InventoryManager
 
         shopkeeperCamera.SetTarget(GetComponentInParent<Shop>().Shopkeeper.gameObject);//set's the inventory camera to follow the player
     }
+
+
 
 }
