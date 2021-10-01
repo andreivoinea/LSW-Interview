@@ -9,17 +9,9 @@ public class Container : MonoBehaviour
     public bool isTradingSlot;
     public ContainerFilled containerInfo = ContainerFilled.NotFilled;//Information about the type of Container
     private Transform containerTransform;//Container's transform
-    public InventoryManager.ItemContent itemContent;//Information about the item inside the container
 
     //Centralized variable that gets and sets the container's transform as well as sets the item information
-    public Transform container { get { return containerTransform; } set { containerTransform = value; SetItemContent(); } }
-
-    //Loads the information about the item contained
-    public void SetItemContent()
-    {
-        if (containerTransform.childCount == 0) return;
-        itemContent = GetItemReference(containerTransform.GetChild(0).gameObject, this);
-    }
+    public Transform container { get { return containerTransform; } set { containerTransform = value; } }
 
     //Determines the placement that the item contained has in the item list
     public int Placement { get { return container.gameObject.transform.GetSiblingIndex(); } }
@@ -43,6 +35,7 @@ public class Container : MonoBehaviour
         //Fills information about the item contained 
         if (container.childCount > 0)
         {
+            InventoryManager.ItemContent itemContent = GetItemReference(this);
             if (item.ItemName() == itemContent.item.Name)//If a NullReferenceException error points to this line it means the item that needs to be inserted/extracted is not part of the InventoryManager's itemList 
             {
                 if (!item.StackableStatus() || itemContent.Size == itemContent.item.maxStack)
@@ -98,18 +91,14 @@ public class Container : MonoBehaviour
     }
 
     //Method that gets the item information about a specified GameObject (used for example for getting the item information of the current item)
-    public static InventoryManager.ItemContent GetItemReference(GameObject comparingItem, Container c)
+    public static InventoryManager.ItemContent GetItemReference(Container c)
     {
-        foreach (InventoryManager.ItemContent item in c.itemList)
-        {
-            if (item.reference == comparingItem)
-            {
-                return item;
-            }
-        }
+        if (c == null) return null;
+        if (c.container.childCount == 0) return null;
 
-        return null;
+        return (c.container.GetChild(0).GetComponent<Item>().content);
     }
+
 
     //Methods that returns the inventory where the specified item is held
     public static InventoryManager GetInventory(GameObject gameObject)

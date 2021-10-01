@@ -118,6 +118,7 @@ public class GameController : MonoBehaviour
         if (item.item == null) return;
 
         item.reference = Instantiate(Instance.GetItem(item.item).gameObject, inventoryContainer.GetChild(item.placement), false);//Creates the item at the specified position
+        item.reference.GetComponent<Item>().content = item;
         item.reference.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item.size.ToString();//Loads the items UI to match the current number of items 
         if (addToList) list.Add(item);//Adds the item to the item list
     }

@@ -78,10 +78,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown("i")) //Show the inventory from the Game Controllor's method
             GameController.Instance.ShowInventory(!GameController.Instance.inventoryStatus);
+    }
 
-
-
-
+    private void Quit()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
 
 

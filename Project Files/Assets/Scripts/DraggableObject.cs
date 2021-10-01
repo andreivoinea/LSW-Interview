@@ -7,7 +7,7 @@ using TMPro;
 using System;
 using System.Linq;
 
-public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
+public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
 {
     //Base Script for the Item Class. All items extend this class and this class contains all methods that users and game logic can interact with items
     //
@@ -16,17 +16,18 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
     private bool isFollowing = false;//Variable that represents the item following the mouse cursor
     private Transform initialContainer;//Initial Container used when an item needs to go back to it's original placed, because of an invalid position
 
-
+    public InventoryManager.ItemContent content;
 
     //Method that handles the user click interactions
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
+
         if (eventData.button == PointerEventData.InputButton.Left) // Left Click
         {
             if (isFollowing)
                 InsertInContainer();//Put item in container
             else
-                ExtractFromContainer();//Pick item from container
+                ExtractItem();//Pick item from container
         }
         else if (eventData.button == PointerEventData.InputButton.Right)//Right Click
         {
@@ -36,7 +37,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                ExtractFromContainer(true);//Pick only half the items from container
+                ExtractItem(true);//Pick only half the items from container
             }
         }
     }
@@ -60,23 +61,13 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         Container c = Container.GetHoveringContainer(GetItem());
         Container init = GetInitialContainer();
 
+        InventoryManager.ItemContent containerContent = Container.GetItemReference(c);
+
         if (c == null) { ReturnToInitialContainer(); return; }//If there was a bad click return to the initial container
 
-        InventoryManager.ItemContent content = Container.GetItemReference(gameObject, c);
-
-        if (c.isTradingSlot)
-        {
-            content = Container.GetItemReference(gameObject, init);
-            c.itemList.Add(content);
-
-            if(size == -1)
-            init.itemList.Remove(content);
-        }else if (init.isTradingSlot)
-        {
-                content = Container.GetItemReference(gameObject, init); init.itemList.Remove(content);
-                content = new InventoryManager.ItemContent((Item)this, gameObject, Container.GetFirstContainerAvalabile(c), init.itemContent.Size);
                 c.itemList.Add(content);
-        }
+            if (size == -1)
+                init.itemList.Remove(content);
 
         switch (c.containerInfo)
         {
@@ -109,7 +100,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
                     transform.SetParent(c.container);
                     transform.localPosition = new Vector3(50f, 50f, 0f);//Accounts for the Item Pivot
 
-                    c.itemContent.reference.GetComponent<Item>().ExtractFromContainer();
+                    Container.GetItemReference(c).reference.GetComponent<Item>().ExtractItem();
 
                     isFollowing = false;
                 }
@@ -120,19 +111,19 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
 
             case Container.ContainerFilled.FilledSameItemNotFull://If the container is filled with the same item and it's not full
                 if (size == -1) size = CurrentItemStack;//Set the size to insert
-                if (size + c.itemContent.Size > c.itemContent.item.maxStack)//If the amount we have add with the existing amount would exceed a stack size, we only input items until we fill the stack and keep the item selected for the user
+                if (size + content.Size > content.item.maxStack)//If the amount we have add with the existing amount would exceed a stack size, we only input items until we fill the stack and keep the item selected for the user
                 {
                     isFollowing = true;
 
-                    content.Size -= c.itemContent.item.maxStack - c.itemContent.Size;
+                    content.Size -= content.item.maxStack - containerContent.Size;
                     if (content.size <= 0) DeleteItem(gameObject, init.itemList);
 
-                    c.itemContent.Size = c.itemContent.item.maxStack;
+                    containerContent.Size = content.item.maxStack;
                     return;
                 }
                 else//If the amount we have add with the existing amount do not exceed the stack size, we add them together
                 {
-                    c.itemContent.Size += size;
+                    Container.GetItemReference(c).Size += size;
 
                     if (keep)
                     {
@@ -162,10 +153,17 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         InsertInContainer(1, true);//Inserts only one item with the intention of keeping the item if the stack is full already
     }
 
-    //Method that extracts items from a container
-    public void ExtractFromContainer(bool half = false)//Argument half is set to true if the user wants to extract only a half of the items
+    public void ExtractItem(bool half = false)
     {
         Container c = Container.GetHoveringContainer(GetItem());
+
+        Container.GetItemReference(c).reference.GetComponent<Item>().ExtractFromContainer(c, half);
+
+    }
+
+    //Method that extracts items from a container
+    public void ExtractFromContainer(Container c,bool half = false)//Argument half is set to true if the user wants to extract only a half of the items
+    {
         if(c == null) return;
         initialContainer = c.container;//Sets the initial container
 
@@ -177,16 +175,16 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
         }
         else containerParent = c.container.parent;
 
-        if (!half || CurrentItemStack==1)//Full extraction when half is set to false or the container only has 1 item
-            transform.SetParent(containerParent);//Extracts Item
+        if (!half || CurrentItemStack == 1)//Full extraction when half is set to false or the container only has 1 item
+            transform.SetParent(containerParent);//Extracts Item        
         else //Half Extraction
         {
             int initSize = CurrentItemStack;
-            Container.GetItemReference(gameObject, c).Size = initSize % 2 == 0 ? initSize / 2 : initSize / 2 + 1;//calculates the new stack size
+            content.Size = initSize % 2 == 0 ? initSize / 2 : initSize / 2 + 1;//calculates the new stack size
 
             transform.SetParent(containerParent);//Extracts Item
 
-            GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, initSize - Container.GetItemReference(gameObject, c).Size), c.itemList, c.container.parent, true);//Creates new Item with the remaining stack size
+            GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, initSize - content.Size), c.itemList, c.container.parent, true);//Creates new Item with the remaining stack size
         }
 
         isFollowing = true;
@@ -215,8 +213,6 @@ public abstract class DraggableObject : MonoBehaviour, IPointerClickHandler
 
         foreach (InventoryManager.ItemContent content in list)
         {
-            Debug.Log(content.item.name);
-            Debug.Log(content.reference.name);
             if (content.reference == item)
             {
                 list.Remove(content);
