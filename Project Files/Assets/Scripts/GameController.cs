@@ -40,13 +40,12 @@ public class GameController : MonoBehaviour
 
     public void OnSceneLoaded(Scene scene,LoadSceneMode mode)
     {
-        Debug.Log(scene.name);
-
         if (scene.name == "GameScene")
         {
             SetPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>());
             StorageManager.Load();//Load Player's Inventory from Storage
         }
+        else StorageManager.Unload();
     }
 
     //Method that sets the reference to the player
@@ -154,6 +153,7 @@ public class GameController : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+        StorageManager.Save();
         SceneManager.LoadScene(sceneName);
     }
 

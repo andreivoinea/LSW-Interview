@@ -105,6 +105,11 @@ public class StorageManager : MonoBehaviour
         SaveInventory(GameController.Instance.Inventory.GetEquipment(),"PlayerEquipment");//Saves Player Equipment
     }
 
+    public static void Unload()
+    {
+        loaded = false;
+    }
+
     //Method that loads all the player information
     public static void Load()
     {

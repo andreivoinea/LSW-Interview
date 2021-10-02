@@ -59,6 +59,9 @@ public class Shop : NPCController
     //Method that starts the Buy functionality of the Shop
     public void BuyPanel()
     {
+        TradeInfo trade = new TradeInfo(this);
+        if (trade.spaceNeeded != 0) return;
+
         BuyButton.interactable = false;
         SellButton.interactable = true;
 
@@ -74,6 +77,9 @@ public class Shop : NPCController
     //Method that starts the Sell functionality of the Shop
     public void SellPanel()
     {
+        TradeInfo trade = new TradeInfo(this);
+        if (trade.spaceNeeded != 0) return;
+
         BuyButton.interactable = true;
         SellButton.interactable = false;
 
@@ -93,10 +99,11 @@ public class Shop : NPCController
         TradeInfo trade = new TradeInfo(this);
         if (trade.spaceNeeded == 0) return; //insert items first
 
-        switch (currentShopMode) {
-            case ShopMode.Buy:             
-               
-                if(!GameController.Instance.CheckCurrency(trade.value)) return; //not enough money
+        switch (currentShopMode)
+        {
+            case ShopMode.Buy:
+
+                if (!GameController.Instance.CheckCurrency(trade.value)) return; //not enough money
 
                 if (!GameController.Instance.CheckInventoryEmptySpaces(trade.spaceNeeded)) return; // no place in inventory
 
@@ -112,7 +119,14 @@ public class Shop : NPCController
                 break;
         }
 
+
         InventoryManager.ClearContents(TradeContainer);
+
+        foreach (Container c in TradeContainer.GetComponentsInChildren<Container>())
+        {
+            c.itemList.Clear();
+        }
+
     }
 
     public class TradeInfo 
