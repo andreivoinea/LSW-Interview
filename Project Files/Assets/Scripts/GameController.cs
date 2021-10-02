@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         //The Game Controller is a singleton, meaning only one can exist at a time in a Scene, the following lines enshure that there is only one GameController in a Scene, and that it can be called from any other Script using the Instance variable
-        if (_instance != null && _instance != this)
-            Destroy(gameObject);
-        else _instance = this;
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+        _instance = this;
+
+        DontDestroyOnLoad(this);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
@@ -32,10 +36,24 @@ public class GameController : MonoBehaviour
     //Variable to access the Player
     public PlayerController Player;
 
+    public GameObject PauseMenu;
+
+    public void OnSceneLoaded(Scene scene,LoadSceneMode mode)
+    {
+        Debug.Log(scene.name);
+
+        if (scene.name == "GameScene")
+        {
+            SetPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>());
+            StorageManager.Load();//Load Player's Inventory from Storage
+        }
+    }
+
     //Method that sets the reference to the player
     public void SetPlayer(PlayerController player)
     {
         Player = player;
+        Inventory = player.InventoryObject;
     }
 
     //Variable that hold information about the Player's action to open or close the Inventory Tab
@@ -128,6 +146,28 @@ public class GameController : MonoBehaviour
     {
         playerInteracting = status;
     }
+
+    public void PausePanel()
+    {
+        PauseMenu.SetActive(!PauseMenu.activeSelf);
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void ResetGame()
+    {
+        PlayerPrefs.DeleteAll();
+        LoadScene("GameScene");
+    }
+
+    public void QuitGmae() 
+    {
+            Application.Quit();
+    }
+
     public bool IsPlayerInteracting() {
         return playerInteracting;
     }

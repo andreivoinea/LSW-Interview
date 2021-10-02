@@ -21,7 +21,7 @@ public abstract class NPCController : MonoBehaviour
     //Method that checks if the player is interacting with the NPC
     private void Update()
     {
-
+        if(GameController.Instance.Player == null) return;
         OnInteracted(GameController.Instance.Player.isInteracting, out _);
     }
 

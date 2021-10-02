@@ -96,6 +96,7 @@ public class StorageManager : MonoBehaviour
     //Method that saves all the player information
     public static void Save() 
     {
+        if (GameController.Instance.Player == null) return;
         SavePlayerStats(GameController.Instance.Player);//Saves Player Stats
         SaveInventory(GameController.Instance.Inventory, "PlayerInventory");//Saves Player Inventory
         SaveInventory(GameController.Instance.Inventory.GetEquipment(),"PlayerEquipment");//Saves Player Equipment
@@ -104,6 +105,7 @@ public class StorageManager : MonoBehaviour
     //Method that loads all the player information
     public static void Load()
     {
+        if (GameController.Instance.Player == null) return;
         if (loaded) return;
 
         LoadPlayerStats(GameController.Instance.Player);//Loads Player Stats
