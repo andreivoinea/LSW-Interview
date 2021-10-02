@@ -13,7 +13,7 @@ public abstract class NPCController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player") {
             col.gameObject.GetComponent<PlayerController>().canInteract = true;
-            ShowUI();
+            ShowUI(interacted);
         }
     }
 
@@ -38,12 +38,15 @@ public abstract class NPCController : MonoBehaviour
 
 
     //Methods that shows the Interact UI
-    abstract protected void ShowUI();
+    abstract protected void ShowUI(bool interactStatus);
 
     //Method that fires when the player interacts or stops interracting with the NPC
     virtual protected void OnInteracted(bool interacting,out bool returnStatus) 
     {
+
         if (interacted == interacting) { returnStatus = true; return; }
+
+        ShowUI(interacting);
 
         if (interacting) GameController.Instance.ShowInventory(false);
         GameController.Instance.PlayerInteracting(interacting);
