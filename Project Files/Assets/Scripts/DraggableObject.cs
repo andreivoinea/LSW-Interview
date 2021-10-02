@@ -61,6 +61,16 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         Container c = Container.GetHoveringContainer(GetItem());
         Container init = GetInitialContainer();
 
+        if (c == null)
+        {
+            ReturnToInitialContainer();
+
+            if (init.IsEquipmentType())
+                GameController.Instance.Player.EquipItem((int)content.item.itemType, content.item.inGameTexture);
+
+            return;
+        }//If there was a bad click return to the initial container
+
         if (content.item.isEquippable && c.IsEquipmentType())
         {
             if (!CheckEquipmentContainer(c, content.item))
@@ -76,8 +86,6 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         InventoryManager.ItemContent containerContent = Container.GetItemReference(c);
 
         if (!content.item.isStackable) size = -1;
-
-        if (c == null) { ReturnToInitialContainer(); return; }//If there was a bad click return to the initial container
 
                 c.itemList.Add(content);
             if (size == -1)

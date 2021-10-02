@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1057804347838068360
+--- !u!1 &11462833888633376
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,29 +8,29 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1832391708263068649}
-  - component: {fileID: 8335539868750634685}
-  - component: {fileID: 8093483778289897771}
-  - component: {fileID: 5486423062236093845}
-  m_Layer: 5
-  m_Name: Shirt Red
-  m_TagString: Item
+  - component: {fileID: 8433985484484037710}
+  - component: {fileID: 1170827516345596313}
+  - component: {fileID: 7445563001263031528}
+  - component: {fileID: 2245945031902037398}
+  m_Layer: 0
+  m_Name: PurplePants
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1832391708263068649
+--- !u!224 &8433985484484037710
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057804347838068360}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 11462833888633376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5477480053000158457}
+  - {fileID: 8629300952655432585}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -39,21 +39,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8335539868750634685
+--- !u!222 &1170827516345596313
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057804347838068360}
+  m_GameObject: {fileID: 11462833888633376}
   m_CullTransparentMesh: 1
---- !u!114 &8093483778289897771
+--- !u!114 &7445563001263031528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057804347838068360}
+  m_GameObject: {fileID: 11462833888633376}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -77,13 +77,13 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5486423062236093845
+--- !u!114 &2245945031902037398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057804347838068360}
+  m_GameObject: {fileID: 11462833888633376}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 669fea9caf431b94b84bf3ec65b29944, type: 3}
@@ -94,20 +94,20 @@ MonoBehaviour:
     reference: {fileID: 0}
     placement: 0
     size: 0
-  Name: Red Shirt
-  description: Simple shirt, with a red color. Wear it to show your fashion sense!
+  Name: Purple Pants
+  description: A pair of  purple pants
   isTradable: 1
-  price: 15
-  image: {fileID: 21300000, guid: 759842515697dff458155fdd9892a5dc, type: 3}
+  price: 20
+  image: {fileID: 21300000, guid: c40035c2d5cf6b442b7cae8c7740c757, type: 3}
   hasDurability: 0
   maxDurability: 0
   currentDurability: 0
   isStackable: 0
   maxStack: 0
   isEquippable: 1
-  itemType: 1
-  inGameTexture: {fileID: 21300000, guid: 5be4f67ddf67b074c8eba221a2313887, type: 3}
---- !u!1 &5373669103654116944
+  itemType: 2
+  inGameTexture: {fileID: 21300000, guid: 1b8a8a3217caa8d4abcb52eee13edff5, type: 3}
+--- !u!1 &880992619662962770
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,9 +115,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5477480053000158457}
-  - component: {fileID: 414685474591569355}
-  - component: {fileID: 2703122223153721450}
+  - component: {fileID: 8629300952655432585}
+  - component: {fileID: 6187376701327823450}
+  - component: {fileID: 1903443158229518448}
   m_Layer: 5
   m_Name: Item Number
   m_TagString: Untagged
@@ -125,18 +125,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!224 &5477480053000158457
+--- !u!224 &8629300952655432585
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5373669103654116944}
+  m_GameObject: {fileID: 880992619662962770}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1832391708263068649}
+  m_Father: {fileID: 8433985484484037710}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -144,21 +144,21 @@ RectTransform:
   m_AnchoredPosition: {x: 85.099976, y: -40.100006}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &414685474591569355
+--- !u!222 &6187376701327823450
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5373669103654116944}
+  m_GameObject: {fileID: 880992619662962770}
   m_CullTransparentMesh: 1
---- !u!114 &2703122223153721450
+--- !u!114 &1903443158229518448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5373669103654116944}
+  m_GameObject: {fileID: 880992619662962770}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}

@@ -12046,12 +12046,20 @@ MonoBehaviour:
   itemList:
   - item: {fileID: 4343421419103278844, guid: f1f597f6a0c2e964ea186cde4376b69b, type: 3}
     reference: {fileID: 0}
-    placement: 1
+    placement: 0
     size: 20
   - item: {fileID: 2043977387371596555, guid: 016edc3f2109b57438269a71eca8d3f5, type: 3}
     reference: {fileID: 0}
-    placement: 2
+    placement: 1
     size: 40
+  - item: {fileID: 5454326940821278046, guid: 85ce67c7b40d7c346bb7cbef9b8eb2ee, type: 3}
+    reference: {fileID: 0}
+    placement: 2
+    size: 0
+  - item: {fileID: 2245945031902037398, guid: 2484200e52bfec645a41ae4d8a88f7c1, type: 3}
+    reference: {fileID: 0}
+    placement: 3
+    size: 0
   InventorySlots: {fileID: 2062850621}
   shopkeeperCamera: {fileID: 0}
   playerCurrencyText: {fileID: 745862824}

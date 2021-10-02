@@ -229,7 +229,7 @@ MonoBehaviour:
     placement: 0
     size: 0
   Name: Green Shirt
-  description: Simple shirt, with a green color. Wear it to show your fasjhion sense!
+  description: Simple shirt, with a green color. Wear it to show your fashion sense!
   isTradable: 1
   price: 15
   image: {fileID: 21300000, guid: 83ecce7aa98ab044d97fc388fd29d2d2, type: 3}
