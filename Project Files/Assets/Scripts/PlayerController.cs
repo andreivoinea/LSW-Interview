@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer Legs;
     public SpriteRenderer Shoes;
 
+    public PlayerInventory InventoryObject;
+
 
     //Called before the first Start Methods, it is used to set the references 
     public void Awake()
@@ -35,11 +37,6 @@ public class PlayerController : MonoBehaviour
         //Focuses the main camera to the player
         mainCamera = Camera.main.GetComponent<CameraController>();
         FocusCamera(gameObject);
-    }
-    private void Start()
-    {
-        //Sets the Game Controller's player reference to the actual player
-        GameController.Instance.SetPlayer(this);
     }
 
     //Method that sets the camera's target and lock status
@@ -59,7 +56,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         Inventory();
         Interact();
-        Quit();
+        Pause();
     }
 
     //Method for the player's movement, it uses the player's movement speed and the user's input to move the player on the map
@@ -87,9 +84,9 @@ public class PlayerController : MonoBehaviour
             GameController.Instance.ShowInventory(!GameController.Instance.inventoryStatus);
     }
 
-    private void Quit()
+    private void Pause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+        if (Input.GetKeyDown(KeyCode.Escape)) GameController.Instance.PausePanel();
     }
 
     public void EquipItem(int equipmentType,Sprite equipmentSprite)

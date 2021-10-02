@@ -26,10 +26,12 @@ public class Shop : NPCController
 
     public List<InventoryManager.ItemContent> playerItemList;//List of all the Items in the Player Inventory
 
+    public GameObject InteractUI;
+
     //Inherited method that shows the interact UI
-    override protected void ShowUI() 
+    override protected void ShowUI(bool interactStatus)
     {
-        Debug.Log("ShowUI");
+        InteractUI.SetActive(!interactStatus);
     }
 
     override protected void OnInteracted(bool interacted,out bool returnStatus)
