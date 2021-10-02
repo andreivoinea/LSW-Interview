@@ -13,7 +13,7 @@ public abstract class NPCController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player") {
             col.gameObject.GetComponent<PlayerController>().canInteract = true;
-            ShowUI(interacted);
+            ShowUI(false);
         }
     }
 
@@ -33,6 +33,7 @@ public abstract class NPCController : MonoBehaviour
             col.gameObject.GetComponent<PlayerController>().canInteract = false;
             col.gameObject.GetComponent<PlayerController>().isInteracting = false;
             OnInteracted(false,out _);
+            ShowUI(true);
         }
     }
 
