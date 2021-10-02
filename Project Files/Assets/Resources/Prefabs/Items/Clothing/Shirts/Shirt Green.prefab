@@ -223,13 +223,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669fea9caf431b94b84bf3ec65b29944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content:
+    item: {fileID: 0}
+    reference: {fileID: 0}
+    placement: 0
+    size: 0
   Name: Green Shirt
   description: Simple shirt, with a green color. Wear it to show your fasjhion sense!
   isTradable: 1
   price: 15
-  image: {fileID: 21300000, guid: 2efa204e569d24c4bbbf59edda4fddd3, type: 3}
+  image: {fileID: 21300000, guid: 83ecce7aa98ab044d97fc388fd29d2d2, type: 3}
   hasDurability: 0
   maxDurability: 0
   currentDurability: 0
   isStackable: 0
   maxStack: 0
+  isEquippable: 1
+  itemType: 1
+  inGameTexture: {fileID: 21300000, guid: 2674cb3e53c71f748a4a16d099b16513, type: 3}
