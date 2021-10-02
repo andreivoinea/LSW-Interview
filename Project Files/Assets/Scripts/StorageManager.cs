@@ -38,26 +38,35 @@ public class StorageManager : MonoBehaviour
         GetPrefabList();
     }
 
-    //Method that saves Player Inventory from the Inventory Manager
-    public static void SaveInvetory(InventoryManager im)
+    //Method that saves an Inventory
+    public static void SaveInventory(InventoryManager im, string saveString)
     {
-        itemWrapper w = new itemWrapper(im.itemList);//Creates a new wrapper from the item list
+        SaveInventory(im.itemList,saveString);
+    }
+    public static void SaveInventory(List<InventoryManager.ItemContent> itemList, string saveString)
+    {
+        itemWrapper w = new itemWrapper(itemList);//Creates a new wrapper from the item list
         string save = JsonUtility.ToJson(w);//Formats the Item data to JSON
-        PlayerPrefs.SetString("PlayerInventory", save);//Saves the JSON to memory
+        PlayerPrefs.SetString(saveString, save);//Saves the JSON to memory
+
     }
 
-    //Method that loads Player Inventory to the Inventory Manager
-    public static void LoadInvetory(InventoryManager im)
+        //Method that loads Player Inventory to the Inventory Manager
+        public static void LoadInventory(InventoryManager im,string searchString)
     {
-        if (loaded) return;
-        string jsonContents = PlayerPrefs.GetString("PlayerInventory", "");//Loads the JSON from memory
+        im.itemList = LoadInventory(searchString);
+    }
+
+    public static List<InventoryManager.ItemContent> LoadInventory(string searchString) 
+    {
+        string jsonContents = PlayerPrefs.GetString(searchString, "");//Loads the JSON from memory
 
         itemWrapper w = new itemWrapper();//Creates a new wrapper to translate the JSON into data
 
         if (jsonContents != "")
             JsonUtility.FromJsonOverwrite(jsonContents, w);//Formats the JSON to Item data
 
-        im.itemList = new List<InventoryManager.ItemContent>(w.array);//Fills the prefab list
+        return new List<InventoryManager.ItemContent>(w.array);//Fills the prefab list
     }
 
     //Method that saves Player Stats
@@ -69,7 +78,6 @@ public class StorageManager : MonoBehaviour
     //Method that loads Player Stats
     public static void LoadPlayerStats(PlayerController player)
     {
-        if (loaded) return;
         player.Currency = PlayerPrefs.GetInt("PlayerCurrency", 0);//Loads the player's currency
     }
 
@@ -89,14 +97,18 @@ public class StorageManager : MonoBehaviour
     public static void Save() 
     {
         SavePlayerStats(GameController.Instance.Player);//Saves Player Stats
-        SaveInvetory(GameController.Instance.Inventory);//Saves Player Inventory
+        SaveInventory(GameController.Instance.Inventory, "PlayerInventory");//Saves Player Inventory
+        SaveInventory(GameController.Instance.Inventory.GetEquipment(),"PlayerEquipment");//Saves Player Equipment
     }
 
     //Method that loads all the player information
     public static void Load()
     {
+        if (loaded) return;
+
         LoadPlayerStats(GameController.Instance.Player);//Loads Player Stats
-        LoadInvetory(GameController.Instance.Inventory);//Loads Player Inventory
+        LoadInventory(GameController.Instance.Inventory, "PlayerInventory");//Loads Player Inventory
+        GameController.Instance.Inventory.SetEquipment(LoadInventory("PlayerEquipment"));
 
         loaded = true;//Remembers that data was already loaded
     }

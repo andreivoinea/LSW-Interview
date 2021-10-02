@@ -61,9 +61,31 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         Container c = Container.GetHoveringContainer(GetItem());
         Container init = GetInitialContainer();
 
+        if (c == null)
+        {
+            ReturnToInitialContainer();
+
+            if (init.IsEquipmentType())
+                GameController.Instance.Player.EquipItem((int)content.item.itemType, content.item.inGameTexture);
+
+            return;
+        }//If there was a bad click return to the initial container
+
+        if (content.item.isEquippable && c.IsEquipmentType())
+        {
+            if (!CheckEquipmentContainer(c, content.item))
+                return;
+
+            GameController.Instance.Player.EquipItem((int)content.item.itemType, content.item.inGameTexture);
+        }
+
+
+        if (!content.item.isEquippable && c.IsEquipmentType())
+            return;
+
         InventoryManager.ItemContent containerContent = Container.GetItemReference(c);
 
-        if (c == null) { ReturnToInitialContainer(); return; }//If there was a bad click return to the initial container
+        if (!content.item.isStackable) size = -1;
 
                 c.itemList.Add(content);
             if (size == -1)
@@ -162,20 +184,22 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
     }
 
     //Method that extracts items from a container
-    public void ExtractFromContainer(Container c,bool half = false)//Argument half is set to true if the user wants to extract only a half of the items
+    public void ExtractFromContainer(Container c, bool half = false)//Argument half is set to true if the user wants to extract only a half of the items
     {
-        if(c == null) return;
+        if (c == null) return;
         initialContainer = c.container;//Sets the initial container
 
         Transform containerParent;
 
-        if (c.isTradingSlot)
+        if (c.containertype != Container.ContainerType.Normal)
         {
             containerParent = c.container.parent.parent.parent;
         }
         else containerParent = c.container.parent;
 
-        if (!half || CurrentItemStack == 1)//Full extraction when half is set to false or the container only has 1 item
+        if (content.item.isEquippable && c.IsEquipmentType()) GameController.Instance.Player.UnequipItem((int)content.item.itemType, content.item.inGameTexture);
+
+        if (!half || CurrentItemStack == 1 || !content.item.isStackable)//Full extraction when half is set to false ,the container only has 1 item, or the item cannot be stacked
             transform.SetParent(containerParent);//Extracts Item        
         else //Half Extraction
         {
@@ -226,9 +250,16 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
     //Method that modifies the stack UI for the item
     public int CurrentItemStack { get { return int.Parse(transform.GetChild(0).GetComponent<TextMeshProUGUI>().text); } set { transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString(); } }
 
-    //Abstract Methods that are overrided in <Item>
-    abstract public string ItemName();
+    public static bool CheckEquipmentContainer(Container c, Item i)
+    {
+        return c.containertype.ToString().Contains(i.itemType.ToString());
+    }
+
+   //Abstract Methods that are overrided in <Item>
+   abstract public string ItemName();
     abstract public bool StackableStatus();
     abstract public Item GetItem();
+
+    
 
 }

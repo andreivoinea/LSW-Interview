@@ -33,6 +33,14 @@ public abstract class InventoryManager : MonoBehaviour
             size = currentSize;
         }
 
+        public ItemContent()
+        {
+            item = null;
+            reference = null;
+            placement = 0;
+            size = 0;
+        }
+
     }
 
     //Emum for the different types of inventories

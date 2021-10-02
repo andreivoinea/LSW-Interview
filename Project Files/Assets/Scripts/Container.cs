@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 public class Container : MonoBehaviour
 {
     //Class for item containers. It should be created on click, and it detects the container the player is hovering over, and loads all the corresponding information
-    public bool isTradingSlot;
+    public ContainerType containertype = ContainerType.Normal;
+
     public ContainerFilled containerInfo = ContainerFilled.NotFilled;//Information about the type of Container
     private Transform containerTransform;//Container's transform
 
@@ -22,6 +23,13 @@ public class Container : MonoBehaviour
     //FilledSameItemNotFull >>> Container holds the same type of item and the stack still can be filled 
     //FilledDifferentItem >>> Container holds a different type of item
     public enum ContainerFilled { NotFilled, FilledSameItemFull, FilledSameItemNotFull, FilledDifferentItem }
+    public enum ContainerType { Normal,TradingSlot,EquipmentHatSlot,EquipmentTorsoSlot, EquipmentLegsSlot, EquipmentShoeSlot }
+
+    public bool IsEquipmentType()
+    {
+        if(containertype == ContainerType.EquipmentHatSlot || containertype == ContainerType.EquipmentTorsoSlot || containertype == ContainerType.EquipmentLegsSlot || containertype == ContainerType.EquipmentShoeSlot) return true;
+        return false;
+    }
 
     //[HideInInspector]
     public List<InventoryManager.ItemContent> itemList;//List from which the container's items are generated

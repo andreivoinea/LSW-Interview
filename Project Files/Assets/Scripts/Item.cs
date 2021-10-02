@@ -8,7 +8,7 @@ public class Item : DraggableObject
     //This Script can be attached to Items. It only holds Item data and it extends DraggableObject. All item data manipulation methods will be created and used in DraggableObject. 
     //It also extends a few abstract methods that allow DraggableObject to access Item variables indirectly
     //
-    
+
     public string Name;//Item Name
     public string description;//Item Description
 
@@ -23,6 +23,11 @@ public class Item : DraggableObject
 
     [HideInInspector] public bool isStackable;//Is Item Stackable
     [HideInInspector] public int maxStack;//Item Max Stacking number
+
+    [HideInInspector] public bool isEquippable;//Is Item Equippable;
+    public enum EquipableItemType { Hat,Torso,Legs,Shoes }
+    [HideInInspector] public EquipableItemType itemType;
+    [HideInInspector] public Sprite inGameTexture;//Item Max Stacking number
 
 
     private Image ImageComponent { get { return GetComponent<Image>();} }//Image Component of the Item

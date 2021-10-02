@@ -132,7 +132,11 @@ public class Shop : NPCController
         {
             if (c.itemList.Count == 0) continue;
 
-            value += c.itemList[0].Size * c.itemList[0].item.price;
+            int size;
+            if (!c.itemList[0].item.isStackable) size = 1;
+            else size = c.itemList[0].Size;
+
+            value += size * c.itemList[0].item.price;
             ++spaceNeeded;
         }
     }
