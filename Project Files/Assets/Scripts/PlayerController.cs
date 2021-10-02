@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool interactStatus = false;
 
+    public SpriteRenderer Hat;
+    public SpriteRenderer Torso;
+    public SpriteRenderer Legs;
+    public SpriteRenderer Shoes;
+
+
     //Called before the first Start Methods, it is used to set the references 
     public void Awake()
     {
@@ -53,6 +59,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         Inventory();
         Interact();
+        Quit();
     }
 
     //Method for the player's movement, it uses the player's movement speed and the user's input to move the player on the map
@@ -83,6 +90,51 @@ public class PlayerController : MonoBehaviour
     private void Quit()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+    }
+
+    public void EquipItem(int equipmentType,Sprite equipmentSprite)
+    {
+        switch (equipmentType)
+        {
+            case 0:
+                Hat.sprite= equipmentSprite;
+                return;
+            case 1:
+                Torso.sprite = equipmentSprite;
+                return;
+            case 2:
+                Legs.sprite = equipmentSprite;
+                return;
+            case 3:
+                Shoes.sprite = equipmentSprite;
+                return;
+            default:
+                return;
+
+        }
+    }
+
+    public void UnequipItem(int equipmentType, Sprite equipmentSprite)
+    {
+        switch (equipmentType)
+        {
+            case 0:
+                if(Hat.sprite == equipmentSprite) Hat.sprite = null;
+                return;
+            case 1:
+                if (Torso.sprite == equipmentSprite) Torso.sprite = null;
+                return;
+            case 2:
+                if (Legs.sprite == equipmentSprite) Legs.sprite = null;
+                return;
+            case 3:
+                if (Shoes.sprite == equipmentSprite) Shoes.sprite = null;
+                return;
+            default:
+                return;
+
+        }
+
     }
 
 
