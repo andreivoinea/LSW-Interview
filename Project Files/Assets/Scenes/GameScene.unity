@@ -12101,19 +12101,19 @@ MonoBehaviour:
   - item: {fileID: 4227701091826446374, guid: c633dd380aaf58a41857b08d6cb23c77, type: 3}
     reference: {fileID: 0}
     placement: 0
-    size: 100
+    size: 5
   - item: {fileID: 4343421419103278844, guid: f1f597f6a0c2e964ea186cde4376b69b, type: 3}
     reference: {fileID: 0}
     placement: 1
-    size: 100
+    size: 5
   - item: {fileID: 393792933892321241, guid: e39531851117dd84793b3399562ed477, type: 3}
     reference: {fileID: 0}
     placement: 2
-    size: 100
+    size: 5
   - item: {fileID: 2043977387371596555, guid: 016edc3f2109b57438269a71eca8d3f5, type: 3}
     reference: {fileID: 0}
     placement: 3
-    size: 100
+    size: 5
   - item: {fileID: 5627117813699874739, guid: 90ca695e37c181542985fe3725cce801, type: 3}
     reference: {fileID: 0}
     placement: 4

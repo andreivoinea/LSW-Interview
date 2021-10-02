@@ -54,6 +54,7 @@ public class Shop : NPCController
             InventoryManager.ClearContents(Inventory.InventorySlots);
             InventoryManager.ClearContents(Inventory.PlayerInventoryHolder);
         }
+
     }
 
     //Method that starts the Buy functionality of the Shop
@@ -172,6 +173,40 @@ public class Shop : NPCController
 
             GameController.Instance.Inventory.itemList.Add(item);
         }
+    }
+
+    private void ShowItemPrices(bool value)
+    {
+        List<InventoryManager.ItemContent> list = new List<InventoryManager.ItemContent>();
+        switch (currentShopMode)
+        {
+            case ShopMode.Buy:
+
+                list = Inventory.itemList;
+
+                break;
+            case ShopMode.Sell:
+
+                list = playerItemList;
+
+                break;
+        }
+
+        foreach (InventoryManager.ItemContent item in list)
+        {
+            if (item.reference != null)
+            {
+                if (value)
+                    item.reference.GetComponent<Item>().CurrentItemPrice = item.item.price;
+                else item.reference.GetComponent<Item>().CurrentItemPrice = -1;
+            }
+        }
+    }
+
+    public new void Update()
+    {
+        base.Update();
+        ShowItemPrices(Inventory.gameObject.activeSelf);
     }
 
 }

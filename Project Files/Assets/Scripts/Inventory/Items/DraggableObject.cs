@@ -249,6 +249,18 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
 
     //Method that modifies the stack UI for the item
     public int CurrentItemStack { get { return int.Parse(transform.GetChild(0).GetComponent<TextMeshProUGUI>().text); } set { transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString(); } }
+    public int CurrentItemPrice
+    {
+        set
+        {
+            if (value >= 0)
+            {
+                transform.GetChild(1).gameObject.SetActive(true);
+                transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = value.ToString();
+            }
+            else transform.GetChild(1).gameObject.SetActive(false);
+        }
+    }
 
     public static bool CheckEquipmentContainer(Container c, Item i)
     {

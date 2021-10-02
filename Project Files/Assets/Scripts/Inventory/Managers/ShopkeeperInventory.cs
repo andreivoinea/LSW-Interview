@@ -19,6 +19,8 @@ public class ShopkeeperInventory : InventoryManager
     //Variable for the player invetory container that holds all other smaller containers. Used to sell items from the player's inventory.
     public Transform PlayerInventoryHolder;
 
+    private Shop shopkeeper;
+
     private new void Update()
     {
         base.Update();
