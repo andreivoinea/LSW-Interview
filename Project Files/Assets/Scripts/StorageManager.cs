@@ -78,7 +78,10 @@ public class StorageManager : MonoBehaviour
     //Method that loads Player Stats
     public static void LoadPlayerStats(PlayerController player)
     {
-        player.Currency = PlayerPrefs.GetInt("PlayerCurrency", 0);//Loads the player's currency
+        int gold = PlayerPrefs.GetInt("PlayerCurrency", -1);
+        if (gold == -1) player.Currency = 2000; //Loads the player with the starting ammount of currency
+        else
+            player.Currency = gold;//Loads the player's currency
     }
 
     //Method that loads all the item Prefab to the prefab list
