@@ -25,14 +25,14 @@ public class Container : MonoBehaviour
     public enum ContainerFilled { NotFilled, FilledSameItemFull, FilledSameItemNotFull, FilledDifferentItem }
     public enum ContainerType { Normal,TradingSlot,EquipmentHatSlot,EquipmentTorsoSlot, EquipmentLegsSlot, EquipmentShoeSlot }
 
+    //Checks if the container is an equipment container
     public bool IsEquipmentType()
     {
         if(containertype == ContainerType.EquipmentHatSlot || containertype == ContainerType.EquipmentTorsoSlot || containertype == ContainerType.EquipmentLegsSlot || containertype == ContainerType.EquipmentShoeSlot) return true;
         return false;
     }
 
-    //[HideInInspector]
-    public List<InventoryManager.ItemContent> itemList;//List from which the container's items are generated
+    [HideInInspector] public List<InventoryManager.ItemContent> itemList;//List from which the container's items are generated
 
     //Method that gets information about the current container the user is hovering
     private Container GetContainer(Item item)
@@ -88,6 +88,7 @@ public class Container : MonoBehaviour
 
     }
 
+    //Returns the first container avalabile from the list of sibling containers (when users buy items we want to fill the inventory's first empty spaces)
     public static int GetFirstContainerAvalabile(Container c)
     {
         foreach (Transform child in c.container.parent)
