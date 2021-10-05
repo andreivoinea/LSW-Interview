@@ -35,14 +35,16 @@ public class StorageManager : MonoBehaviour
 
     private void Awake()
     {
-        GetPrefabList();
+        GetPrefabList();//Gets the list of all prefab items on runtime
     }
 
-    //Method that saves an Inventory
+    //Method that saves an Inventory with a specified Inventory Manager
     public static void SaveInventory(InventoryManager im, string saveString)
     {
         SaveInventory(im.itemList,saveString);
     }
+    
+    //Method that saves an Inventory with a specified Item Content List
     public static void SaveInventory(List<InventoryManager.ItemContent> itemList, string saveString)
     {
         itemWrapper w = new itemWrapper(itemList);//Creates a new wrapper from the item list
@@ -51,12 +53,13 @@ public class StorageManager : MonoBehaviour
 
     }
 
-        //Method that loads Player Inventory to the Inventory Manager
+        //Method that loads Player Inventory to a specified Inventory Manager
         public static void LoadInventory(InventoryManager im,string searchString)
     {
         im.itemList = LoadInventory(searchString);
     }
 
+    //Method that returns a specified saved Item Content List
     public static List<InventoryManager.ItemContent> LoadInventory(string searchString) 
     {
         string jsonContents = PlayerPrefs.GetString(searchString, "");//Loads the JSON from memory
@@ -105,6 +108,7 @@ public class StorageManager : MonoBehaviour
         SaveInventory(GameController.Instance.Inventory.GetEquipment(),"PlayerEquipment");//Saves Player Equipment
     }
 
+    //Refreshes the loading state, usefull for reloads of the scene, or back and forths between the menu and game scene
     public static void Unload()
     {
         loaded = false;
