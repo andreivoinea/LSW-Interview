@@ -33,6 +33,11 @@ ExportedObj/
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
+# Unity3D Log Files
+AssetImportWorker0-prev.log
+AssetImportWorker0.log
+shadercompiler-AssetImportWorker0.log
+
 # Builds
 *.apk
 *.unitypackage
