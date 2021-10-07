@@ -16,7 +16,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
     private bool isFollowing = false;//Variable that represents the item following the mouse cursor
     private Transform initialContainer;//Initial Container used when an item needs to go back to it's original placed, because of an invalid position
 
-    public InventoryManager.ItemContent content;
+    public InventoryManager.ItemContent content;//Variable that hold the content for the current item
 
     //Method that handles the user click interactions
     public void OnPointerDown(PointerEventData eventData)
@@ -58,9 +58,11 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
     //Method that inserts items in a container
     private void InsertInContainer(int size = -1, bool keep = false)
     {
+        //Gets information about both containers, the initial one the item was extracted from, as well as the one the user wants to insert to
         Container c = Container.GetHoveringContainer(GetItem());
         Container init = GetInitialContainer();
 
+        //If there was a bad click return to the initial container
         if (c == null)
         {
             ReturnToInitialContainer();
@@ -69,28 +71,33 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
                 GameController.Instance.Player.EquipItem((int)content.item.itemType, content.item.inGameTexture);
 
             return;
-        }//If there was a bad click return to the initial container
+        }
 
+        //Handles the case where the user wants to equip an item
         if (content.item.isEquippable && c.IsEquipmentType())
         {
-            if (!CheckEquipmentContainer(c, content.item))
+            if (!CheckEquipmentContainer(c, content.item))//Checks if the container is of the right type of equipment
                 return;
 
             GameController.Instance.Player.EquipItem((int)content.item.itemType, content.item.inGameTexture);
         }
 
-
+        //If a players tries to equip a non equippable item, do nothing
         if (!content.item.isEquippable && c.IsEquipmentType())
             return;
 
+        //Gets the current contents of the container
         InventoryManager.ItemContent containerContent = Container.GetItemReference(c);
 
+        //if item is non stackable we always want to insert the full size
         if (!content.item.isStackable) size = -1;
 
+        //moves the content to the new container
                 c.itemList.Add(content);
             if (size == -1)
                 init.itemList.Remove(content);
 
+        //Different cases of insertion
         switch (c.containerInfo)
         {
             case Container.ContainerFilled.NotFilled://If the container is empty
@@ -175,6 +182,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         InsertInContainer(1, true);//Inserts only one item with the intention of keeping the item if the stack is full already
     }
 
+    //Makes sure no overlapping between the items occurs and extracts the correct item
     public void ExtractItem(bool half = false)
     {
         Container c = Container.GetHoveringContainer(GetItem());
@@ -189,15 +197,16 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         if (c == null) return;
         initialContainer = c.container;//Sets the initial container
 
-        Transform containerParent;
+        Transform containerParent;//Sets where the extraction of the item is going to occur
 
         if (c.containertype != Container.ContainerType.Normal)
         {
-            containerParent = c.container.parent.parent.parent;
+            containerParent = c.container.parent.parent.parent;//For items that are not in default containers
         }
-        else containerParent = c.container.parent;
+        else containerParent = c.container.parent;//For items that are in default containers
 
-        if (content.item.isEquippable && c.IsEquipmentType()) GameController.Instance.Player.UnequipItem((int)content.item.itemType, content.item.inGameTexture);
+        //If the item was equpped, unequip it
+        if (c.IsEquipmentType()) GameController.Instance.Player.UnequipItem((int)content.item.itemType, content.item.inGameTexture);
 
         if (!half || CurrentItemStack == 1 || !content.item.isStackable)//Full extraction when half is set to false ,the container only has 1 item, or the item cannot be stacked
             transform.SetParent(containerParent);//Extracts Item        
@@ -208,12 +217,14 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
 
             transform.SetParent(containerParent);//Extracts Item
 
+            //Creates a new item instance in the place of the old one, with half of the initial stack size
             GameController.CreateItem(new InventoryManager.ItemContent(GameController.Instance.GetItem(GetItem()), c.Placement, initSize - content.Size), c.itemList, c.container.parent, true);//Creates new Item with the remaining stack size
         }
 
-        isFollowing = true;
+        isFollowing = true;//starts following the mouse
     }
-
+    
+    //Method that returns the initial container the item was picked up from
     private Container GetInitialContainer()
     {
         return initialContainer.GetComponent<Container>();
@@ -249,6 +260,8 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
 
     //Method that modifies the stack UI for the item
     public int CurrentItemStack { get { return int.Parse(transform.GetChild(0).GetComponent<TextMeshProUGUI>().text); } set { transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString(); } }
+    
+    //Method that modifies the price UI for the item
     public int CurrentItemPrice
     {
         set
@@ -262,6 +275,7 @@ public abstract class DraggableObject : MonoBehaviour, IPointerDownHandler
         }
     }
 
+    //Method that checks if an item container is of a specific equipment type (Hat,Torso,Legs,Shoes)
     public static bool CheckEquipmentContainer(Container c, Item i)
     {
         return c.containertype.ToString().Contains(i.itemType.ToString());
